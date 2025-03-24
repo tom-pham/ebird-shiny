@@ -265,8 +265,8 @@ server <- function(input, output, session) {
     url <- paste0("https://ebird.org/species/", spcode)
 
     imgsrc <- read_html(url) %>%
-      html_node(xpath = '//*/img') %>%
-      html_attr('src')
+      html_nodes('meta[property="og:image"]') %>%
+      html_attr('content')
     
     # Retrieve the description for the given bird species. If none exists
     # return message saying no description available
