@@ -204,7 +204,7 @@ server <- function(input, output, session) {
     if (is_empty(observations())) {
       leaflet() %>% 
         addProviderTiles(providers$CartoDB.DarkMatter, group = "Dark") %>% 
-        addProviderTiles(providers$Stamen.TerrainBackground, group = "Terrain") %>%
+        addProviderTiles(providers$Stadia.StamenTerrain, group = "Terrain") %>%
         setView(lng = -98.5795, lat = 39.828175, zoom = 4) %>% 
         addMiniMap(tiles = providers$CartoDB.DarkMatter) %>% 
         addLayersControl(
@@ -218,7 +218,7 @@ server <- function(input, output, session) {
       if (input$radio_maptype == "1") {
         leaflet(data = observations()) %>% 
           addProviderTiles(providers$CartoDB.DarkMatter, group = "Dark") %>% 
-          addProviderTiles(providers$Stamen.TerrainBackground, group = "Terrain") %>%
+          addProviderTiles(providers$Stadia.StamenTerrain, group = "Terrain") %>%
           addMiniMap(tiles = providers$CartoDB.DarkMatter) %>% 
           addCircleMarkers(~lng, ~lat, 
                            popup = ~as.character(locName), 
@@ -232,7 +232,7 @@ server <- function(input, output, session) {
         timestep <- time_step_obs()
         leaflet(data = timestep, width = "100%", height = "800px") %>%
           addProviderTiles(providers$CartoDB.DarkMatter, group = "Dark") %>% 
-          addProviderTiles(providers$Stamen.TerrainBackground, group = "Terrain") %>%
+          addProviderTiles(providers$Stadia.StamenTerrain, group = "Terrain") %>%
           addMinicharts(
             lat = timestep$lat,
             lng =  timestep$lng,
@@ -317,7 +317,7 @@ server <- function(input, output, session) {
     if (is_empty(notable_near())) {
       leaflet() %>% 
         addProviderTiles(providers$CartoDB.DarkMatter, group = "Dark") %>% 
-        addProviderTiles(providers$Stamen.TerrainBackground, group = "Terrain") %>% 
+        addProviderTiles(providers$Stadia.StamenTerrain, group = "Terrain") %>% 
         setView(lng = input$long, lat = input$lat, zoom = 10) %>% 
         addLayersControl(
           baseGroups = c("Dark", "Terrain"),
@@ -328,7 +328,7 @@ server <- function(input, output, session) {
     }else {
       leaflet(data = notable_near()) %>% 
         addProviderTiles(providers$CartoDB.DarkMatter, group = "Dark") %>% 
-        addProviderTiles(providers$Stamen.TerrainBackground, group = "Terrain") %>% 
+        addProviderTiles(providers$Stadia.StamenTerrain, group = "Terrain") %>% 
         setView(lng = input$long, lat = input$lat, zoom = 10) %>% 
         addCircleMarkers(~lng, ~lat, 
                          layerId = ~uid,
