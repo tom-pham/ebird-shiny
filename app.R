@@ -213,8 +213,7 @@ server <- function(input, output, session) {
         )
       
     }else {
-      print(input$radio_maptype)
-      print(class(input$radio_maptype))
+
       if (input$radio_maptype == "1") {
         leaflet(data = observations()) %>% 
           addProviderTiles(providers$CartoDB.DarkMatter, group = "Dark") %>% 
