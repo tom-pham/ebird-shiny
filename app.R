@@ -325,6 +325,11 @@ server <- function(input, output, session) {
         pull()
       
       tags$div(class="header", checked=NA,
+               tags$a(
+                 href = paste0("https://ebird.org/species/", taxonomy[comName == input$speciesInput, speciesCode]),
+                 style = "font-size: 20px;",  
+                 input$speciesInput
+               ),         
                tags$img(src = imgsrc, width = "100%"),
                tags$h3("Description"),
                tags$p(descript),
