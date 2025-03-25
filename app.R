@@ -205,8 +205,29 @@ server <- function(input, output, session) {
   
   output$mymap <- renderLeaflet({
     
-    # If no records were retrieved display empty map centered on the contiguous US
-    if (is_empty(observations())) {
+    # No species selected yet, center on state
+    if (input$speciesInput == '') {
+      
+      leaflet()  %>% 
+        addPolygons(
+          data = filter(states_shp, NAME == input$stateInput),
+          color = 'red',
+          weight = 1,
+          fillColor = 'black',
+          fillOpacity = 0) %>% 
+        addProviderTiles(providers$CartoDB.DarkMatter, group = "Dark") %>% 
+        addProviderTiles(providers$Stadia.StamenTerrain, group = "Terrain") %>% 
+        setView(
+          lng = state_centers[State == input$stateInput, Lon],
+          lat = state_centers[State == input$stateInput, Lat],
+          zoom = state_centers[State == input$stateInput, zoom]) %>%
+        addLayersControl(
+          baseGroups = c("Dark", "Terrain"),
+          options = layersControlOptions(collapsed = FALSE)
+        ) %>% 
+        addMiniMap(tiles = providers$CartoDB.DarkMatter)
+      
+    } else if (is_empty(observations())) {
       leaflet() %>% 
         addProviderTiles(providers$CartoDB.DarkMatter, group = "Dark") %>% 
         addProviderTiles(providers$Stadia.StamenTerrain, group = "Terrain") %>%
@@ -217,7 +238,7 @@ server <- function(input, output, session) {
           options = layersControlOptions(collapsed = FALSE)
         )
       
-    }else {
+    } else {
 
       if (input$radio_maptype == "1") {
         leaflet(data = observations()) %>% 
