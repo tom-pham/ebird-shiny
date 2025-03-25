@@ -1,5 +1,6 @@
 library(shiny)
 library(tidyverse)
+library(data.table)
 library(rebird)
 library(leaflet)
 library(leaflet.minicharts)
@@ -11,9 +12,9 @@ library(DT)
 library(plotly)
 
 # Load some data
-taxonomy <- read_csv("taxonomy.csv")
-state_centers <- read_csv("state_centers.csv")
-regionCodeUS <- read_csv("regionCodeUS.csv")
+taxonomy <- fread("taxonomy.csv")
+state_centers <- fread("state_centers.csv")
+regionCodeUS <- fread("regionCodeUS.csv")
 EBIRD_KEY <- readRDS('EBIRD_KEY.rds')
 
 ui <- fluidPage(
