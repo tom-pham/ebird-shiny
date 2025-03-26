@@ -410,18 +410,18 @@ server <- function(input, output, session) {
     
     filtered_notable <- filtered_notable()
     
-      datatable(
-        filtered_notable, 
-        selection = 'single',
-        options = list(
-          dom = 't', # Removes unnecessary elements like search bar, if not needed
-          initComplete = JS(
-            "function(settings, json) {",
-            "$(this.api().table().container()).css({'color': 'white'});", # Change all text to red
-            "}"
-          )
+    datatable(
+      filtered_notable, 
+      selection = 'single',
+      options = list(
+        dom = 't', # Removes unnecessary elements like search bar, if not needed
+        initComplete = JS(
+          "function(settings, json) {",
+          "$(this.api().table().container()).css({'color': 'white'});", # Change all text to red
+          "}"
         )
       )
+    )
   })
   
   observeEvent(input$nearbyTable_rows_selected, {
