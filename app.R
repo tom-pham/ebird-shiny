@@ -85,7 +85,8 @@ ui <- fluidPage(
                       '),
                       sidebarLayout(
                         sidebarPanel(
-                          helpText("Allow the browser to provide your location to see notable sightings near you!")
+                          helpText("Allow the browser to provide your location to see notable sightings near you!"),
+                          uiOutput("notable_bird_description"),
                         ),
                         mainPanel(
                           leafletOutput("near_me_map",
@@ -421,6 +422,52 @@ server <- function(input, output, session) {
         )
       )
   })
+  
+  observeEvent(input$nearbyTable_rows_selected, {
+  req(filtered_notable())  # Ensure data is not NULL
+  
+  # Reset the filtered_notable when switching locations
+  if (length(input$nearbyTable_rows_selected) > 0) {
+    # Get the currently selected row
+    selected_row <- filtered_notable()[input$nearbyTable_rows_selected, ]
+    species_name <- selected_row$`Common name`
+    
+    # Retrieve the species code for the selected bird
+    spcode <- taxonomy$speciesCode[taxonomy$comName == species_name]
+    
+    # Get bird image and description
+    url <- paste0("https://ebird.org/species/", spcode)
+    
+    imgsrc <- read_html(url) %>%
+      html_nodes('meta[property="og:image"]') %>%
+      html_attr('content')
+    
+    # Retrieve description for the selected bird species
+    descript <- tryCatch(read_html(url) %>%
+                           html_nodes('p.u-stack-sm') %>%
+                           html_text() %>%
+                           .[[1]], error = function(e) "No description available")
+    
+    # Render the bird description and image
+    output$notable_bird_description <- renderUI({
+      tags$div(class = "header", checked = NA,
+               tags$a(
+                 href = paste0("https://ebird.org/species/", spcode),
+                 style = "font-size: 20px;",
+                 species_name
+               ),
+               tags$img(src = imgsrc, width = "100%"),
+               tags$h3("Description"),
+               tags$p(descript)
+      )
+    })
+  } else {
+    # Reset the display when no rows are selected
+    output$notable_bird_description <- renderUI({
+      tags$p("Please select a location.")
+    })
+  }
+})
   
 }
 
