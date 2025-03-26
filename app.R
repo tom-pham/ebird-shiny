@@ -387,10 +387,11 @@ server <- function(input, output, session) {
     notable <- notable_near()
     loc_click = notable$locName[notable$uid == p$id]
     
+    # Update the filtered_notable based on the location clicked
     filtered_notable(
       notable %>% 
         mutate(obsDt = as.character(as.Date(obsDt))) %>% 
-        group_by(comName, locName, sciName, obsDt) %>% 
+        group_by(comName, locName, sciName, obsDt, .groups = "drop") %>% 
         summarise(maxCount = max(howMany)) %>% 
         filter(locName == loc_click) %>% 
         select(
