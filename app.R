@@ -13,9 +13,9 @@ library(DT)
 library(plotly)
 
 # Load some data
-states_shp <- states()
 taxonomy <- fread(file.path("data/taxonomy.csv"))
 state_centers <- fread(file.path("data/state_centers.csv"))
+states_shp <- read_sf(file.path("data/states_shp.shp"))
 states_shp <- st_transform(states_shp, crs = 4326)
 
 regionCodeUS <- fread(file.path("data/regionCodeUS.csv"))
