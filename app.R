@@ -13,13 +13,13 @@ library(DT)
 library(plotly)
 
 # Load some data
-taxonomy <- fread("taxonomy.csv")
-state_centers <- fread("state_centers.csv")
 states_shp <- states()
+taxonomy <- fread(file.path("data/taxonomy.csv"))
+state_centers <- fread(file.path("data/state_centers.csv"))
 states_shp <- st_transform(states_shp, crs = 4326)
 
-regionCodeUS <- fread("regionCodeUS.csv")
-EBIRD_KEY <- readRDS('EBIRD_KEY.rds')
+regionCodeUS <- fread(file.path("data/regionCodeUS.csv"))
+EBIRD_KEY <- readRDS(file.path("data/EBIRD_KEY.rds"))
 
 ui <- fluidPage(
   theme = shinytheme("darkly"),
