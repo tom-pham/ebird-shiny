@@ -422,17 +422,6 @@ server <- function(input, output, session) {
       )
   })
   
-  observe({
-    selected_row <- input$mytable_rows_selected
-    if (length(selected_row) > 0) {
-      # Remove the highlight from all rows first
-      runjs("$('.dataTable tbody tr').removeClass('selected');")
-      # Apply highlight to the selected row only
-      runjs(sprintf("$('.dataTable tbody tr:eq(%d)').addClass('selected');", selected_row))
-    }
-  })
-  
-  
 }
 
 shinyApp(ui = ui, server = server)
