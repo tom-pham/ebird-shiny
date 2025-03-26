@@ -23,6 +23,9 @@ EBIRD_KEY <- readRDS(file.path("data/EBIRD_KEY.rds"))
 
 ui <- fluidPage(
   theme = shinytheme("darkly"),
+  tags$style(HTML("
+    .selected { background-color: #FFD700 !important; } /* Highlight color */
+  ")),
   navbarPage("eBird Species Occurence",
              tabPanel("Recent Observations",
                       titlePanel("Species observed in the past 30 days"),
@@ -89,7 +92,8 @@ ui <- fluidPage(
                                         width = "75%",
                                         height = 600),
                           fluidRow(verbatimTextOutput("near_me_map_marker_click")),
-                          tableOutput("nearbyTable")
+                          DTOutput("nearbyTable",
+                                   width = "75%")
                         )
                       )
              )
@@ -401,6 +405,36 @@ server <- function(input, output, session) {
         arrange('Observe Date')
     })
   })
+  
+  output$nearbyTable <- renderDT({
+    req(filtered_notable())  # Ensure it's not NULL
+    
+    filtered_notable <- filtered_notable()
+    
+      datatable(
+        filtered_notable, 
+        selection = 'single',
+        options = list(
+          dom = 't', # Removes unnecessary elements like search bar, if not needed
+          initComplete = JS(
+            "function(settings, json) {",
+            "$(this.api().table().container()).css({'color': 'white'});", # Change all text to red
+            "}"
+          )
+        )
+      )
+  })
+  
+  observe({
+    selected_row <- input$mytable_rows_selected
+    if (length(selected_row) > 0) {
+      # Remove the highlight from all rows first
+      runjs("$('.dataTable tbody tr').removeClass('selected');")
+      # Apply highlight to the selected row only
+      runjs(sprintf("$('.dataTable tbody tr:eq(%d)').addClass('selected');", selected_row))
+    }
+  })
+  
   
 }
 
