@@ -378,22 +378,19 @@ server <- function(input, output, session) {
     
   })
   
-  # Produces table output in response to clicks on notable nearby map markers
+  filtered_notable <- reactiveVal(NULL)
+  
   observeEvent(input$near_me_map_marker_click, {
-    # Essentially the attributes of the clicked receiver marker is assigned to p
     p <- input$near_me_map_marker_click
-
+    
     notable <- notable_near()
-    # Display table info for clicked marker
-    output$nearbyTable <- renderTable({
-      loc_click = notable$locName[notable$uid == p$id]
-
-      notable <- notable %>% 
+    loc_click = notable$locName[notable$uid == p$id]
+    
+    filtered_notable(
+      notable %>% 
         mutate(obsDt = as.character(as.Date(obsDt))) %>% 
         group_by(comName, locName, sciName, obsDt) %>% 
-        summarise(maxCount = max(howMany))
-      
-      notable %>% 
+        summarise(maxCount = max(howMany)) %>% 
         filter(locName == loc_click) %>% 
         select(
           'Common name' = comName,
@@ -403,7 +400,7 @@ server <- function(input, output, session) {
           'Max observations' = maxCount
         ) %>% 
         arrange('Observe Date')
-    })
+    )
   })
   
   output$nearbyTable <- renderDT({
