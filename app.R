@@ -9,8 +9,8 @@ library(shinythemes)
 library(rvest)
 library(tigris)
 library(httr)
+library(sf)
 library(DT)
-library(plotly)
 
 # Load some data
 taxonomy <- fread(file.path("data/taxonomy.csv"))
